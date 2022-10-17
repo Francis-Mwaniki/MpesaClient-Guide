@@ -7,23 +7,24 @@ import CommunityIcon from "./icons/IconCommunity.vue";
 import SupportIcon from "./icons/IconSupport.vue";
 import { ref } from "vue";
 let num = ref(null);
-let phoneValue = {
+let amt = ref(null);
+let Value = {
   numValue: num,
+  amtValue: amt,
 };
 let message = ref([]);
 let registerSuccessMsg = ref([]);
 let simulateSuccessMsg = ref([]);
 let stkSuccessMsg = ref([]);
 let stkMsg = ref("");
-async function catchNum() {
-  console.log(phoneValue);
+async function catchNumAndAmount() {
   let url = "http://localhost:5000/phone";
   let res = await fetch(url, {
     method: "POST",
     headers: {
       "Content-type": "application/json",
     },
-    body: JSON.stringify(num),
+    body: JSON.stringify(Value),
   });
   if (res.ok) {
     let data = await res.json();
@@ -150,7 +151,8 @@ async function stk_push() {
       </template>
       <div class="allInOne">
         <input type="number" class="inp" placeholder="Enter phone" v-model="num" />
-        <button @click="catchNum" class="btn">Enter..</button>
+        <input type="number" class="inp" placeholder="Enter Amount" v-model="amt" />
+        <button @click="catchNumAndAmount" class="btn">Enter ##..</button>
         <button @click="stk_push" class="btn">All in one pay</button>
       </div>
     </WelcomeItem>
