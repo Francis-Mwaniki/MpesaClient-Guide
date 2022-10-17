@@ -99,7 +99,6 @@ async function stk() {
     console.log("error");
   }
 }
-
 async function stk_push() {
   await register();
   await simulate();
@@ -121,7 +120,6 @@ async function stk_push() {
         <ToolingIcon />
       </template>
       <div>Mpesa Api</div>
-
       <br />
     </WelcomeItem>
 
