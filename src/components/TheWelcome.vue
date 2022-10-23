@@ -31,7 +31,6 @@ async function register() {
     let data = await res.json();
     registerSuccessMsg.value = data;
     console.table(data);
-    alert("registered successfully");
   } else {
     console.log("error");
   }
@@ -49,8 +48,6 @@ async function simulate() {
     let data = await res.json();
     simulateSuccessMsg.value = data;
     console.table(data);
-
-    alert("simulated successfully");
   } else {
     console.log("error");
   }
@@ -69,8 +66,9 @@ async function stk() {
     let data = await res.json();
     stkSuccessMsg.value = data;
     console.table(data);
-
-    alert("pushed stk  successfully");
+  } else {
+    let data = await res.json();
+    alert(data.message);
   }
 }
 async function allPush() {
