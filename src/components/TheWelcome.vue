@@ -5,7 +5,7 @@ import ToolingIcon from "./icons/IconTooling.vue";
 import EcosystemIcon from "./icons/IconEcosystem.vue";
 import CommunityIcon from "./icons/IconCommunity.vue";
 import SupportIcon from "./icons/IconSupport.vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 let num = ref(null);
 let amt = ref(null);
 let Value = {
@@ -17,20 +17,7 @@ let registerSuccessMsg = ref([]);
 let simulateSuccessMsg = ref([]);
 let stkSuccessMsg = ref([]);
 let stkMsg = ref("");
-async function catchNumAndAmount() {
-  let url = "http://localhost:5000/phone";
-  let res = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json",
-    },
-    body: JSON.stringify(Value),
-  });
-  if (res.ok) {
-    let data = await res.json();
-    alert(data.message);
-  }
-}
+
 async function register() {
   console.log("------------register-------------------");
   let url = "http://localhost:5000/register";
@@ -72,10 +59,11 @@ async function stk() {
   console.log("------------push stk-------------------");
   let url = "http://localhost:5000/stk";
   let res = await fetch(url, {
-    method: "GET",
+    method: "POST",
     headers: {
       "Content-type": "application/json",
     },
+    body: JSON.stringify(Value),
   });
   if (res.ok) {
     let data = await res.json();
@@ -83,6 +71,15 @@ async function stk() {
     console.table(data);
 
     alert("pushed stk  successfully");
+  }
+}
+async function allPush() {
+  await register();
+  await simulate();
+  await stk();
+}
+onMounted(() => {
+  async function getAll() {
     let callbackUrl = "http://localhost:5000/getRes";
     let accessedData = await fetch(callbackUrl, {
       method: "GET",
@@ -94,16 +91,12 @@ async function stk() {
       let data = await accessedData.json();
       stkMsg.value = data;
       console.log(data);
+    } else {
+      console.log(error);
     }
-  } else {
-    console.log("error");
   }
-}
-async function stk_push() {
-  await register();
-  await simulate();
-  await stk();
-}
+  getAll();
+});
 </script>
 
 <template>
@@ -150,8 +143,7 @@ async function stk_push() {
       <div class="allInOne">
         <input type="number" class="inp" placeholder="Enter phone" v-model="num" />
         <input type="number" class="inp" placeholder="Enter Amount" v-model="amt" />
-        <button @click="catchNumAndAmount" class="btn">Enter ##..</button>
-        <button @click="stk_push" class="btn">All in one pay</button>
+        <button @click="allPush" class="btn">All in one pay</button>
       </div>
     </WelcomeItem>
     <div class="transaction">{{ message }}</div>
